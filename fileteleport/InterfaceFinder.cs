@@ -1,5 +1,5 @@
 ﻿
-//Copyright 2019 Jolan Aklin and Yohan Zbinden
+//Copyright 2019,2020 Jolan Aklin and Yohan Zbinden
 
 
 //This file is part of FileTeleporter.
