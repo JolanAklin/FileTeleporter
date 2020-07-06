@@ -49,7 +49,21 @@ namespace fileteleport
             threadConnect.IsBackground = true;
             threadConnect.Start();
         }
+        private bool sendThroughSocket(Socket s, string filePath)
+        {
+            FileStream file = new FileStream(filePath, FileMode.Open);
+            int chunkSize = 500000000;
+            long remaining = file.Length;
+            int offset = 0;
+            while (true)
+            {
+                int sizeToRead = chunkSize;
+                if (remaining < chunkSize)
+                {
 
+                }
+            }
+        }
         public List<byte> receivedMsg = new List<byte>();
 
         public byte[] StreamtoByteArray(Stream stream)
@@ -113,7 +127,7 @@ namespace fileteleport
                 sendSocket.Send(Encoding.UTF8.GetBytes(sendInfo));
 
                 Thread.Sleep(100);
-                sendSocket.Send(file);
+                //sendSocket.Send(file);
                 // Close Socket using  
                 // the method Close()
                 sendSocket.Shutdown(SocketShutdown.Both);

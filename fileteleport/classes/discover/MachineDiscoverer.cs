@@ -104,8 +104,7 @@ namespace fileteleport
             }
             catch(SocketException s) 
             {
-                new Message(s.Message, "Error").ShowDialog();
-                break;
+                new Message(s.Message, "Error").ShowDialog();                
             }
             while (true)
             {

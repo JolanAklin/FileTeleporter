@@ -101,17 +101,17 @@ namespace fileteleport
 
             this.BackColor = Theme.backColor1;
             pnlScroll.BackColor = Theme.backColor2;
-            //Machine pc1;
-            //pc1 = new Machine("Pc de jean", IPAddress.Parse("192.168.0.184"), this);
-            //pcs.Add(pc1);
-            //pc1 = new Machine("Pc de jean", IPAddress.Parse("127.0.0.1"), this);
-            //ShowMachine(pc1);
-            //for (int i = 0; i < 20; i++)
-            //{
-            //    pc1 = new Machine("Pc de jean", IPAddress.Parse("127.0.0." + i),this);
+            Machine pc1;
+            pc1 = new Machine("Pc de jean", IPAddress.Parse("192.168.0.184"), this);
+            pcs.Add(pc1);
+            pc1 = new Machine("Pc de jean", IPAddress.Parse("127.0.0.1"), this);
+            ShowMachine(pc1);
+            for (int i = 0; i < 20; i++)
+            {
+                pc1 = new Machine("Pc de jean", IPAddress.Parse("127.0.0." + i), this);
 
-            //}
-            //ShowPc(pc1);
+            }
+            ShowPc(pc1);
 
             //start the receving server
             sendfile.Initialize(this);
