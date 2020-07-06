@@ -27,6 +27,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace fileteleport
 {
@@ -93,10 +94,18 @@ namespace fileteleport
             Thread threadGetOtherPcIp = new Thread(() => ReceiveIpFromOtherMachine());
             threadGetOtherPcIp.IsBackground = true;
             threadGetOtherPcIp.Start();
-            foreach (var ipAndMask in InterfaceFinder.Find())
+            try
             {
-                udpClient.Send(toSend, toSend.Length, IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString(), PORT);
-                Console.WriteLine("[send] => " + Encoding.UTF8.GetString(toSend) + " [throught] => broadcast (" + IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString() + ")");
+                foreach (var ipAndMask in InterfaceFinder.Find())
+                {
+                    udpClient.Send(toSend, toSend.Length, IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString(), PORT);
+                    Console.WriteLine("[send] => " + Encoding.UTF8.GetString(toSend) + " [throught] => broadcast (" + IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString() + ")");
+                }
+            }
+            catch(SocketException s) 
+            {
+                new Message(s.Message, "Error").ShowDialog();
+                break;
             }
             while (true)
             {
