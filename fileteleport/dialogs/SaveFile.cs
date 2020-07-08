@@ -80,8 +80,16 @@ namespace fileteleport
         private void lblYes_Click(object sender, EventArgs e)
         {
             sfd1.Title = "Save the received file";
-            sfd1.Filter = fileNameExtension[1] + " files (*." + fileNameExtension[1] + ")|*." + fileNameExtension[1];
-            sfd1.FileName = fileNameExtension[0];
+            sfd1.Filter = fileNameExtension[fileNameExtension.Length -1] + " files (*." + fileNameExtension[fileNameExtension.Length - 1] + ")|*." + fileNameExtension[fileNameExtension.Length - 1];
+            string filename = "";
+            for(int i = 0;i < fileNameExtension.Length;i++)
+            {
+                if (i == 0)
+                    filename += fileNameExtension[i];
+                else
+                    filename += "." + fileNameExtension[i];
+            }
+            sfd1.FileName = filename;
             if (sfd1.ShowDialog() == DialogResult.OK)
             {
                 mainForm.AsToSaveFile(true,sfd1.FileName);

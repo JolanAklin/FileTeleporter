@@ -147,7 +147,13 @@ namespace fileteleport
             Console.WriteLine("[send] => " + "disconnected" + ";" + Environment.MachineName);
             foreach (var ipAndMask in InterfaceFinder.Find())
             {
-                udpClient.Send(data, data.Length, IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString(), PORT);
+                try
+                {
+                    udpClient.Send(data, data.Length, IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString(), PORT);
+                }catch(Exception e)
+                {
+                    mainForm.ShowError(e.Message);
+                }
             }
         }
 

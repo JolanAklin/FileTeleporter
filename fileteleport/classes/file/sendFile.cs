@@ -27,6 +27,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.IO;
 using System.Security.Permissions;
+using System.ComponentModel;
 
 namespace fileteleport
 {
@@ -49,18 +50,25 @@ namespace fileteleport
             threadConnect.IsBackground = true;
             threadConnect.Start();
         }
-        private bool sendThroughSocket(Socket s, string filePath)
+        private void sendThroughSocket(Socket s, string filePath)
         {
-            FileStream file = new FileStream(filePath, FileMode.Open);
-            int chunkSize = 500000000;
-            long remaining = file.Length;
-            int offset = 0;
-            while (true)
-            {
-                int sizeToRead = chunkSize;
-                if (remaining < chunkSize)
-                {
 
+            using (var file = File.OpenRead(filePath))
+            {
+                byte[] sendBuffer = new byte[50000];
+                int readOffset = 0;
+                long bytesLeftToTransmit = file.Length;
+                while (bytesLeftToTransmit > 0)
+                {
+                    int dataToSend = file.Read(sendBuffer, readOffset, sendBuffer.Length);
+                    bytesLeftToTransmit -= dataToSend;
+
+                    if(sendBuffer[sendBuffer.Length -1] != default(byte) || file.Length <sendBuffer.Length -1)
+                    {
+                        s.Send(sendBuffer);
+                        sendBuffer = new byte[50000];
+                    }
+                    readOffset += dataToSend;
                 }
             }
         }
@@ -127,6 +135,13 @@ namespace fileteleport
                 sendSocket.Send(Encoding.UTF8.GetBytes(sendInfo));
 
                 Thread.Sleep(100);
+                try
+                {
+                    sendThroughSocket(sendSocket,filename);
+                }catch(Exception e)
+                {
+                    mainForm.ShowError("an error as occured when sending the file: " + e.Message);
+                }
                 //sendSocket.Send(file);
                 // Close Socket using  
                 // the method Close()
@@ -183,18 +198,32 @@ namespace fileteleport
                 string[] fileNameExtension = new string[2];
                 string[] fileName = filename.Split('\\');
                 fileNameExtension = fileName[fileName.Length - 1].Split('.');
-
-
                 int nbKo = Convert.ToInt32(Convert.ToDouble(strLenght)/* / 1024*/);
                 bytes = new Byte[1];
-                //receive the file content
-                for (int i = 0; i < nbKo; i++)
-                {
-                    int numByte = clientSocket.Receive(bytes);
-                    receivedMsg.AddRange(bytes);
-                }
-                //dialogue box for saving the file
                 mainForm.ShowSaveDialogue(fileNameExtension, strLenght, pcName);
+                FileStream Stream = new FileStream(fileName[fileName.Length -1],FileMode.Create);                
+                int bytesLeftToReceive = nbKo;
+                byte[] receiveBuffer = new byte[2048];
+                int offset = 0;
+                //receive the file content
+                while(bytesLeftToReceive > 0)
+                {
+                    int bytesRead = clientSocket.Receive(receiveBuffer);
+                    if (bytesRead > bytesLeftToReceive)
+                    {
+                        //if we don't do that the file will have a lot of zeroes at the end
+                        Stream.Write(receiveBuffer, 0, bytesLeftToReceive);
+                    }
+                    else
+                    {
+                        Stream.Write(receiveBuffer, 0, bytesRead);
+                        receiveBuffer = new byte[2048];
+                    }
+                        bytesLeftToReceive -= bytesRead;
+                    //receivedMsg.AddRange(bytes);
+                }
+                Stream.Close();
+                //dialogue box for saving the file
 
                 // Close client Socket using the 
                 // Close() method. After closing, 
@@ -208,10 +237,10 @@ namespace fileteleport
         //write the received file
         public void WriteFile(bool writeFile, string path)
         {
-            if (writeFile)
-            {
-                File.WriteAllBytes(path, receivedMsg.ToArray());
-            }
+            //if (writeFile)
+            //{
+            //    File.WriteAllBytes(path, receivedMsg.ToArray());
+            //}
         }
     }
 }
