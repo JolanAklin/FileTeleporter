@@ -94,18 +94,18 @@ namespace fileteleport
             Thread threadGetOtherPcIp = new Thread(() => ReceiveIpFromOtherMachine());
             threadGetOtherPcIp.IsBackground = true;
             threadGetOtherPcIp.Start();
-            try
+            foreach (var ipAndMask in InterfaceFinder.Find())
             {
-                foreach (var ipAndMask in InterfaceFinder.Find())
+                try
                 {
                     udpClient.Send(toSend, toSend.Length, IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString(), PORT);
                     Console.WriteLine("[send] => " + Encoding.UTF8.GetString(toSend) + " [throught] => broadcast (" + IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString() + ")");
                 }
-            }
-            catch(SocketException s) 
-            {
-                new Message(s.Message, "Error").ShowDialog();                
-            }
+                catch(SocketException s)
+                {
+
+                }
+            }                        
             while (true)
             {
                 var recvBuffer = udpClient.Receive(ref from);
@@ -150,9 +150,9 @@ namespace fileteleport
                 try
                 {
                     udpClient.Send(data, data.Length, IPCalculator.CalculateBCAddress(ipAndMask[0], ipAndMask[1]).ToString(), PORT);
-                }catch(Exception e)
-                {
-                    mainForm.ShowError(e.Message);
+                }
+                catch (SocketException e)
+                {                    
                 }
             }
         }
@@ -299,6 +299,10 @@ namespace fileteleport
             {
                 return "";
             }
+        }
+        public static bool PingHost(IPAddress ip)
+        {
+            return PingHost(ip.ToString());
         }
         public static bool PingHost(string nameOrAddress)
         {

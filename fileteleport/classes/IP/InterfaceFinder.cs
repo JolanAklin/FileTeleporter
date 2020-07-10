@@ -51,11 +51,11 @@ namespace fileteleport
                         foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
                         {
                             if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                            {
-                                ipsAndMasks.Add(new List<IPAddress>());
-                                ipsAndMasks[ipsAndMasks.Count - 1].Add(ip.Address);
-                                ipsAndMasks[ipsAndMasks.Count - 1].Add(ip.IPv4Mask);
-                                //Console.WriteLine(ip.Address + " / " + ip.IPv4Mask);
+                            {                                                                
+                                    ipsAndMasks.Add(new List<IPAddress>());
+                                    ipsAndMasks[ipsAndMasks.Count - 1].Add(ip.Address);
+                                    ipsAndMasks[ipsAndMasks.Count - 1].Add(ip.IPv4Mask);
+                                    Console.WriteLine(ip.Address + " / " + ip.IPv4Mask);                                
                             }
                         }
                     }

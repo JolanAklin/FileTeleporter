@@ -93,8 +93,8 @@ namespace fileteleport
             sfd1.FileName = filename;
             if (sfd1.ShowDialog() == DialogResult.OK)
             {
-                mainForm.AsToSaveFile(true,sfd1.FileName);
                 this.Close();
+                mainForm.AsToSaveFile(true,sfd1.FileName);
             }
         }
     }
