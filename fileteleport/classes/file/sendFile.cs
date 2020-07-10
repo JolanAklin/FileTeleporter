@@ -39,6 +39,9 @@ namespace fileteleport
         Thread threadBind;
         long nbKo;
         Socket clientSocket;
+        bool receiveFinished;
+        const bool useChecksum = false;
+        string checksum;
         public void Initialize(Form1 mainForm)
         {
             this.mainForm = mainForm;
@@ -75,12 +78,12 @@ namespace fileteleport
         }
         private string getChecksum(string file)
         {
-            using(FileStream stream = File.OpenRead(file))
-            {
-                SHA512Managed sha = new SHA512Managed();
-                byte[] checksum = sha.ComputeHash(stream);
-                return Encoding.UTF8.GetString(checksum);
-            }
+            FileStream stream = File.OpenRead(file);
+            BufferedStream bf = new BufferedStream(stream);
+            SHA512Managed sha = new SHA512Managed();
+            byte[] checksum = sha.ComputeHash(bf);
+            stream.Close();
+            return BitConverter.ToString(checksum);            
         }
         public List<byte> receivedMsg = new List<byte>();
 
@@ -141,7 +144,7 @@ namespace fileteleport
                 // that we are connected 
                 Console.WriteLine("Socket connected to -> {0} ", sendSocket.RemoteEndPoint.ToString());
                 //send some info in csv format (length of the file, file name with it's extension and the name of the pc)
-                string sendInfo = (fileinfo.Length).ToString() + ";" + fileinfo.Name + ";" + mainForm.pcName + ";" + getChecksum(fileinfo.FullName) + "<EOF>";
+                string sendInfo = (fileinfo.Length).ToString() + ";" + fileinfo.Name + ";" + mainForm.pcName + ";" + (useChecksum ?getChecksum(fileinfo.FullName): "null") + "<EOF>";
                 sendSocket.Send(Encoding.UTF8.GetBytes(sendInfo));
 
                 Thread.Sleep(100);
@@ -204,13 +207,24 @@ namespace fileteleport
                 string[] splitedData = data.Split(';');
                 string strLenght = splitedData[0];
                 string filename = splitedData[1];
-                string checksum = splitedData[2];
-                string pcName = splitedData[2].Split('<')[0];
+                this.checksum = splitedData[3].Split('<')[0];
+                string pcName = splitedData[2];
                 string[] fileNameExtension = new string[2];
                 string[] fileName = filename.Split('\\');
                 fileNameExtension = fileName[fileName.Length - 1].Split('.');
-                this.nbKo = Convert.ToInt64(strLenght);               
-                mainForm.ShowSaveDialogue(fileNameExtension, strLenght, pcName);                                         
+                this.nbKo = Convert.ToInt64(strLenght);              
+                mainForm.ShowSaveDialogue(fileNameExtension, strLenght, pcName);
+                receiveFinished = false;
+                while(!receiveFinished)
+                {
+
+                }
+                // Close client Socket using the 
+                // Close() method. After closing, 
+                // we can use the closed Socket  
+                // for a new Client Connection
+                clientSocket.Shutdown(SocketShutdown.Both);
+                clientSocket.Close();
             }
         }
 
@@ -261,13 +275,16 @@ namespace fileteleport
                 }
                 receiveBuffer = null;
                 Stream.Close();
-
-                // Close client Socket using the 
-                // Close() method. After closing, 
-                // we can use the closed Socket  
-                // for a new Client Connection
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
+                //check checksum
+                Console.WriteLine(checksum);
+                if (this.checksum != "null" && useChecksum)
+                {
+                    if (!this.checksum.Equals(getChecksum(path)))
+                    {
+                        mainForm.ShowError("the received file is not the same as the sending one");
+                    }
+                }
+                receiveFinished = true;
             }
         }
     }
