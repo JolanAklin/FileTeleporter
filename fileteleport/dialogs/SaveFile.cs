@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -36,7 +37,7 @@ namespace fileteleport
         private Form1 mainForm;
         private string[] fileNameExtension;
         private string weight;
-        private string pcName;
+        private string pcName;        
 
         public SaveFile(Form1 mainForm,string[] fileNameExtension, string size, string pcName)
         {
@@ -44,7 +45,7 @@ namespace fileteleport
             this.mainForm = mainForm;
             this.fileNameExtension = fileNameExtension;
             weight = (Math.Round(Convert.ToDouble(size) / (double)1024)).ToString() + "Ko";
-            this.pcName = pcName;
+            this.pcName = pcName;            
         }
 
         private void SaveFile_Load(object sender, EventArgs e)
