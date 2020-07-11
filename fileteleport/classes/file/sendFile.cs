@@ -31,6 +31,7 @@ using System.ComponentModel;
 using System.Security.Cryptography;
 using fileteleport.dialogs;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace fileteleport
 {
@@ -71,15 +72,14 @@ namespace fileteleport
             Thread.Sleep(500);
             using (var file = File.OpenRead(filePath))
             {
-                Thread.Sleep(1000);
-                byte[] sendBuffer = new byte[50000];
+                byte[] sendBuffer = new byte[5000000];
                 long bytesLeftToTransmit = file.Length;
                 double fileLengthMo = (double)file.Length / 1048576;
                 while (bytesLeftToTransmit > 0)
                 {
                     int dataToSend = file.Read(sendBuffer, 0, sendBuffer.Length);
                     bytesLeftToTransmit -= dataToSend;
-                    //s.Send(sendBuffer);
+                    s.Send(sendBuffer);
                     int percentage = Convert.ToInt32((((double)file.Length - (double)bytesLeftToTransmit) / (double)file.Length)*(double)100);
                     mainForm.MoveProgressBar(percentage);
                     mainForm.ChangeProgressDialogueText("Transfering...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1048576).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
@@ -238,8 +238,8 @@ namespace fileteleport
                 // Close() method. After closing, 
                 // we can use the closed Socket  
                 // for a new Client Connection
-                //clientSocket.Shutdown(SocketShutdown.Both);
-                //clientSocket.Close();
+                clientSocket.Shutdown(SocketShutdown.Both);
+                clientSocket.Close();
             }
         }
 

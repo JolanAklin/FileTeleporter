@@ -32,6 +32,7 @@ using Theming;
 using System.Net;
 using System.Net.Sockets;
 using fileteleport.dialogs;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace fileteleport
 {
@@ -165,6 +166,10 @@ namespace fileteleport
             Invoke(new Action(() =>
             {
                 saveFile(fileNameExtension, size, pcName);
+                //Thread threadProgress;
+                //threadProgress = new Thread(() => saveFile(fileNameExtension, size, pcName));
+                //threadProgress.IsBackground = true;
+                //threadProgress.Start();
             }));
         }
 
