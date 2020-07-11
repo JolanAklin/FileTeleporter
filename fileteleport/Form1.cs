@@ -39,6 +39,7 @@ namespace fileteleport
     {
         private List<Machine> pcs;
         public String pcName = System.Environment.MachineName;
+        public ProgressDialogue pDialogue;
 
         private int row = 1;
         public sendFile sendfile = new sendFile();
@@ -58,6 +59,9 @@ namespace fileteleport
             tRecieveInfo.IsBackground = true;
             tRecieveInfo.Start();
             pcs = new List<Machine>();
+            pDialogue = new ProgressDialogue("transfer", "transfer", 0);
+
+            
         }
 
         public void ShowPcInvoke(Machine pc)
@@ -116,7 +120,10 @@ namespace fileteleport
 
             //start the receving server
             sendfile.Initialize(this);
+            
+
         }
+
 
         #region afficheur de machine
         private void ShowMachine(Machine machineToShow)
@@ -202,5 +209,46 @@ namespace fileteleport
                 msg.Show();
             }));
         }
+
+        #region ProgressBarDialogue
+        public void ShowProgressBarDialogue (string text, string title, int value)
+        {
+            Invoke(new Action(() =>
+            {
+                Thread threadProgress;
+                threadProgress = new Thread(() => ProgressBarThread(text, title, value));
+                threadProgress.IsBackground = true;
+                threadProgress.Start();
+            }));
+        }
+        public void ProgressBarThread(string text, string title, int value)
+        {
+            pDialogue = new ProgressDialogue(text, title, value);
+            pDialogue.ShowDialog();
+
+        }
+        public void MoveProgressBar(int increment)
+        {
+            Invoke(new Action(() =>
+            {
+                pDialogue.SetProgress(increment);
+            }));
+        }
+        public void ChangeProgressDialogueText(string text)
+        {
+            Invoke(new Action(() =>
+            {
+                pDialogue.ChangeText(text);
+            }));
+        }
+
+        public void CloseProgressDialogue()
+        {
+            Invoke(new Action(() =>
+            {
+                pDialogue.CloseForm();
+            }));
+        }
+        #endregion
     }
 }

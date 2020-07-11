@@ -16,6 +16,7 @@
 //You should have received a copy of the GNU General Public License
 //along with FileTeleporter.  If not, see<https://www.gnu.org/licenses/>.
 
+using fileteleport.classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,7 +32,7 @@ namespace fileteleport.dialogs
 {
     public partial class ProgressDialogue : Form
     {
-        public ProgressDialogue(string text, string title)
+        public ProgressDialogue(string text, string title, int value)
         {
             InitializeComponent();
             this.Text = title;
@@ -39,6 +40,7 @@ namespace fileteleport.dialogs
             lblInfoProgress.BackColor = Theme.backColor1;
             tableLayoutPanel1.BackColor = Theme.backColor1;
             lblInfoProgress.Text = text;
+            pBar.Value = value;
         }
 
         /// <summary>
@@ -47,10 +49,14 @@ namespace fileteleport.dialogs
         /// <param name="pos">position for the progress bar to be at</param>
         public void SetProgress (int pos)
         {
-            if(pos <= pBar.Maximum && pos >= pBar.Minimum)
+            Invoke(new Action(() =>
             {
-                pBar.Value = pos;
-            }
+                if (pos <= pBar.Maximum && pos >= pBar.Minimum)
+                {
+                    pBar.Value = pos;
+                }
+            }));
+            
         }
 
         /// <summary>
@@ -71,6 +77,7 @@ namespace fileteleport.dialogs
             {
                 pBar.Value += increment;
             }
+            
         }
 
         /// <summary>
@@ -89,7 +96,10 @@ namespace fileteleport.dialogs
         /// <param name="text">New text</param>
         public void ChangeText (string text)
         {
-            lblInfoProgress.Text = text;
+            Invoke(new Action(() =>
+            {
+                lblInfoProgress.Text = text;
+            }));
         }
 
         public string getText ()
@@ -100,7 +110,10 @@ namespace fileteleport.dialogs
 
         public void CloseForm ()
         {
-            this.Close();
+            Invoke(new Action(() =>
+            {
+                this.Close();
+            }));
         }
     }
 }

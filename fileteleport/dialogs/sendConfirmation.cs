@@ -81,8 +81,7 @@ namespace fileteleport
 
         private void lblYes_Click(object sender, EventArgs e)
         {
-            sendFile.Send(destIP, fileToSend);
-            this.Close();
+            sendFile.Send(destIP, fileToSend,this);
         }
     }
 }

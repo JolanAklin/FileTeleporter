@@ -29,6 +29,8 @@ using System.IO;
 using System.Security.Permissions;
 using System.ComponentModel;
 using System.Security.Cryptography;
+using fileteleport.dialogs;
+using System.Windows.Forms;
 
 namespace fileteleport
 {
@@ -50,11 +52,12 @@ namespace fileteleport
             threadBind.IsBackground = true;
             threadBind.Start();
         }
-        public void Send(string destIP, string fileToSend)
+        public void Send(string destIP, string fileToSend, Form form)
         {
             threadConnect = new Thread(() => Connect(destIP, fileToSend));
             threadConnect.IsBackground = true;
             threadConnect.Start();
+            form.Close();
         }
         /// <summary>
         /// send the content of the filepath trough the socket per chunk
@@ -63,17 +66,26 @@ namespace fileteleport
         /// <param name="filePath">path of the file</param>
         private void sendThroughSocket(Socket s, string filePath)
         {
+
+            mainForm.ShowProgressBarDialogue("transfering...", "transfering...",0);
+            Thread.Sleep(500);
             using (var file = File.OpenRead(filePath))
             {
-                byte[] sendBuffer = new byte[5000000];                
+                Thread.Sleep(1000);
+                byte[] sendBuffer = new byte[50000];
                 long bytesLeftToTransmit = file.Length;
+                double fileLengthMo = (double)file.Length / 1048576;
                 while (bytesLeftToTransmit > 0)
                 {
                     int dataToSend = file.Read(sendBuffer, 0, sendBuffer.Length);
                     bytesLeftToTransmit -= dataToSend;
-                    s.Send(sendBuffer);                      
+                    //s.Send(sendBuffer);
+                    int percentage = Convert.ToInt32((((double)file.Length - (double)bytesLeftToTransmit) / (double)file.Length)*(double)100);
+                    mainForm.MoveProgressBar(percentage);
+                    mainForm.ChangeProgressDialogueText("Transfering...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1048576).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
                 }
                 sendBuffer = null;
+                mainForm.CloseProgressDialogue();
             }
         }
         private string getChecksum(string file)
@@ -151,7 +163,8 @@ namespace fileteleport
                 try
                 {
                     sendThroughSocket(sendSocket,filename);
-                }catch(Exception e)
+                }
+                catch(Exception e)
                 {
                     mainForm.ShowError("an error as occured when sending the file: " + e.Message);
                 }
@@ -212,19 +225,21 @@ namespace fileteleport
                 string[] fileNameExtension = new string[2];
                 string[] fileName = filename.Split('\\');
                 fileNameExtension = fileName[fileName.Length - 1].Split('.');
-                this.nbKo = Convert.ToInt64(strLenght);              
+                this.nbKo = Convert.ToInt64(strLenght);
                 mainForm.ShowSaveDialogue(fileNameExtension, strLenght, pcName);
                 receiveFinished = false;
-                while(!receiveFinished)
+                while (!receiveFinished)
                 {
 
                 }
+
+
                 // Close client Socket using the 
                 // Close() method. After closing, 
                 // we can use the closed Socket  
                 // for a new Client Connection
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
+                //clientSocket.Shutdown(SocketShutdown.Both);
+                //clientSocket.Close();
             }
         }
 
