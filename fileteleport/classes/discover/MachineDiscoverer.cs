@@ -272,62 +272,26 @@ namespace fileteleport
                         break;
                 }
             }
-            Console.WriteLine("try to ping " + foundedNetIp);
-            if (PingHost(foundedNetIp.ToString()))
+            
+            bool write = true;
+            for (int j = 0; j < allPcName.Count; j++)
             {
-                Console.WriteLine("can ping other " + foundedNetIp.ToString());
-                bool write = true;
-                for (int j = 0; j < allPcName.Count; j++)
+                if (allPcName[j] == otherPcName)
                 {
-                    if (allPcName[j] == otherPcName)
-                    {
-                        //Console.WriteLine(allPcName[j] + " == " + otherPcName + " | " + allIPOfTransfer[j] + " == " + foundedNetIp);
-                        write = false;
-                        break;
-                    }
-                }
-                if (write)
-                {
-                    Console.WriteLine("pc name: " + otherPcName);
-                    allPcName.Add(otherPcName);
-                    Console.WriteLine("ip: " + foundedNetIp);
-                    allIPOfTransfer.Add(foundedNetIp);
-                    mainForm.ShowPcInvoke(new Machine(otherPcName, foundedNetIp, mainForm));
-                }
-                return foundedNetIp.ToString();
-            }else
-            {
-                return "";
-            }
-        }
-        public static bool PingHost(IPAddress ip)
-        {
-            return PingHost(ip.ToString());
-        }
-        public static bool PingHost(string nameOrAddress)
-        {
-            bool pingable = false;
-            Ping pinger = null;
-
-            try
-            {
-                pinger = new Ping();
-                PingReply reply = pinger.Send(nameOrAddress);
-                pingable = reply.Status == IPStatus.Success;
-            }
-            catch (PingException)
-            {
-                // Discard PingExceptions and return false;
-            }
-            finally
-            {
-                if (pinger != null)
-                {
-                    pinger.Dispose();
+                    //Console.WriteLine(allPcName[j] + " == " + otherPcName + " | " + allIPOfTransfer[j] + " == " + foundedNetIp);
+                    write = false;
+                    break;
                 }
             }
-
-            return pingable;
+            if (write)
+            {
+                Console.WriteLine("pc name: " + otherPcName);
+                allPcName.Add(otherPcName);
+                Console.WriteLine("ip: " + foundedNetIp);
+                allIPOfTransfer.Add(foundedNetIp);
+                mainForm.ShowPcInvoke(new Machine(otherPcName, foundedNetIp, mainForm));
+            }
+            return foundedNetIp.ToString();
         }
     }
 }

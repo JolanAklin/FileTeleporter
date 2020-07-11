@@ -77,7 +77,7 @@ namespace fileteleport
             {
                 byte[] sendBuffer = new byte[BUFFER_SIZE];
                 long bytesLeftToTransmit = file.Length;
-                double fileLengthMo = (double)file.Length / 1048576;
+                double fileLengthMo = (double)file.Length / 1000000;
                 while (bytesLeftToTransmit > 0)
                 {
                     int dataToSend = file.Read(sendBuffer, 0, sendBuffer.Length);
@@ -85,7 +85,7 @@ namespace fileteleport
                     s.Send(sendBuffer);
                     int percentage = Convert.ToInt32((((double)file.Length - (double)bytesLeftToTransmit) / (double)file.Length) * (double)100);
                     mainForm.MoveProgressBar(percentage);
-                    mainForm.ChangeProgressDialogueText("Transfering...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1048576).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
+                    mainForm.ChangeProgressDialogueText("Transfering...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1000000).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
                 }
                 sendBuffer = null;
                 mainForm.CloseProgressDialogue();
