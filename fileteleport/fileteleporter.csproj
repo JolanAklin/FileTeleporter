@@ -84,15 +84,21 @@
     <Compile Include="dialogs\Message.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="dialogs\Message.Designer.cs" />
+    <Compile Include="dialogs\Message.Designer.cs">
+      <DependentUpon>Message.cs</DependentUpon>
+    </Compile>
     <Compile Include="dialogs\SaveFile.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="dialogs\SaveFile.Designer.cs" />
+    <Compile Include="dialogs\SaveFile.Designer.cs">
+      <DependentUpon>SaveFile.cs</DependentUpon>
+    </Compile>
     <Compile Include="dialogs\sendConfirmation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="dialogs\sendConfirmation.Designer.cs" />
+    <Compile Include="dialogs\sendConfirmation.Designer.cs">
+      <DependentUpon>sendConfirmation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
