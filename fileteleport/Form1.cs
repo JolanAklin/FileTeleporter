@@ -31,6 +31,7 @@ using System.Threading;
 using Theming;
 using System.Net;
 using System.Net.Sockets;
+using fileteleport.dialogs;
 
 namespace fileteleport
 {
