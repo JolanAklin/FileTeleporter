@@ -178,9 +178,12 @@ namespace fileteleport
             SaveFile savefileDialog = new SaveFile(this, fileNameExtension, size, pcName);
             savefileDialog.ShowDialog();
         }
-        public void AsToSaveFile(bool saveFile,string path)
+        public void AsToSaveFile(string path)
         {
-            sendfile.WriteFile(saveFile,path);
+            Thread writefile;
+            writefile = new Thread(() => sendfile.WriteFile(path));
+            writefile.IsBackground = true;
+            writefile.Start();            
         }
         #endregion
 

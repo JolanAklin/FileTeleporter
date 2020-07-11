@@ -62,7 +62,7 @@ namespace fileteleport
 
         private void lblNo_Click(object sender, EventArgs e)
         {
-            mainForm.AsToSaveFile(false, "");
+            //mainForm.AsToSaveFile(false, "");
             this.Close();
         }
 
@@ -94,7 +94,7 @@ namespace fileteleport
             if (sfd1.ShowDialog() == DialogResult.OK)
             {
                 this.Close();
-                mainForm.AsToSaveFile(true,sfd1.FileName);
+                mainForm.AsToSaveFile(sfd1.FileName);
             }
         }
     }

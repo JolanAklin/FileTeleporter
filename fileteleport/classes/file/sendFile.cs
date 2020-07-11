@@ -40,16 +40,19 @@ namespace fileteleport
         private Form1 mainForm;
         Thread threadConnect;
         Thread threadBind;
-        long nbKo;
+        long nbo;
         Socket clientSocket;
         bool receiveFinished;
         const bool useChecksum = false;
         string checksum;
+
+        const int BUFFER_SIZE = 5000000; //5Mo
+
         public void Initialize(Form1 mainForm)
         {
             this.mainForm = mainForm;
             var context = SynchronizationContext.Current;
-            threadBind = new Thread(() =>  Bind());
+            threadBind = new Thread(() => Bind());
             threadBind.IsBackground = true;
             threadBind.Start();
         }
@@ -68,11 +71,11 @@ namespace fileteleport
         private void sendThroughSocket(Socket s, string filePath)
         {
 
-            mainForm.ShowProgressBarDialogue("transfering...", "transfering...",0);
+            mainForm.ShowProgressBarDialogue("transfering...", "transfering...", 0);
             Thread.Sleep(500);
             using (var file = File.OpenRead(filePath))
             {
-                byte[] sendBuffer = new byte[5000000];
+                byte[] sendBuffer = new byte[BUFFER_SIZE];
                 long bytesLeftToTransmit = file.Length;
                 double fileLengthMo = (double)file.Length / 1048576;
                 while (bytesLeftToTransmit > 0)
@@ -80,7 +83,7 @@ namespace fileteleport
                     int dataToSend = file.Read(sendBuffer, 0, sendBuffer.Length);
                     bytesLeftToTransmit -= dataToSend;
                     s.Send(sendBuffer);
-                    int percentage = Convert.ToInt32((((double)file.Length - (double)bytesLeftToTransmit) / (double)file.Length)*(double)100);
+                    int percentage = Convert.ToInt32((((double)file.Length - (double)bytesLeftToTransmit) / (double)file.Length) * (double)100);
                     mainForm.MoveProgressBar(percentage);
                     mainForm.ChangeProgressDialogueText("Transfering...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1048576).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
                 }
@@ -95,7 +98,7 @@ namespace fileteleport
             SHA512Managed sha = new SHA512Managed();
             byte[] checksum = sha.ComputeHash(bf);
             stream.Close();
-            return BitConverter.ToString(checksum);            
+            return BitConverter.ToString(checksum);
         }
         public List<byte> receivedMsg = new List<byte>();
 
@@ -139,7 +142,7 @@ namespace fileteleport
                 mainForm.ShowError("The file cannot be opened");
                 exception = true;
             }
-            if(!exception)
+            if (!exception)
             {
                 IPAddress ipAddr = IPAddress.Parse(ip);
                 IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 53457);
@@ -156,15 +159,24 @@ namespace fileteleport
                 // that we are connected 
                 Console.WriteLine("Socket connected to -> {0} ", sendSocket.RemoteEndPoint.ToString());
                 //send some info in csv format (length of the file, file name with it's extension and the name of the pc)
-                string sendInfo = (fileinfo.Length).ToString() + ";" + fileinfo.Name + ";" + mainForm.pcName + ";" + (useChecksum ?getChecksum(fileinfo.FullName): "null") + "<EOF>";
+                string sendInfo = (fileinfo.Length).ToString() + ";" + fileinfo.Name + ";" + mainForm.pcName + ";" + (useChecksum ? getChecksum(fileinfo.FullName) : "null") + "<EOF>";
                 sendSocket.Send(Encoding.UTF8.GetBytes(sendInfo));
-
-                Thread.Sleep(100);
+                
+                byte[] bytes = new Byte[1024];
+                string data;
+                while (true)
+                {
+                    int numByte = sendSocket.Receive(bytes);
+                    data = Encoding.UTF8.GetString(bytes, 0, numByte);
+                    if (data.IndexOf("<EOF>") > -1)
+                        break;
+                }
                 try
                 {
-                    sendThroughSocket(sendSocket,filename);
+                    Console.WriteLine("begin transfering file");
+                    sendThroughSocket(sendSocket, filename);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     mainForm.ShowError("an error as occured when sending the file: " + e.Message);
                 }
@@ -195,7 +207,7 @@ namespace fileteleport
             // to connect to Server 
             listener.Listen(10);
             while (true)
-            {          
+            {
                 //if (threadStop)
                 //{
                 //    Console.WriteLine("thread closed");
@@ -225,82 +237,77 @@ namespace fileteleport
                 string[] fileNameExtension = new string[2];
                 string[] fileName = filename.Split('\\');
                 fileNameExtension = fileName[fileName.Length - 1].Split('.');
-                this.nbKo = Convert.ToInt64(strLenght);
+                this.nbo = Convert.ToInt64(strLenght);
                 mainForm.ShowSaveDialogue(fileNameExtension, strLenght, pcName);
-                receiveFinished = false;
-                while (!receiveFinished)
-                {
-
-                }
+                //replace "user" by your user directory
+                //WriteFile("C:\\Users\\user\\Desktop\\test.txt");
 
 
                 // Close client Socket using the 
                 // Close() method. After closing, 
                 // we can use the closed Socket  
                 // for a new Client Connection
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
+                //clientSocket.Shutdown(SocketShutdown.Both);
+                //clientSocket.Close();
             }
         }
 
         //write the received file
-        public void WriteFile(bool writeFile, string path)
+        public void WriteFile(string path)
         {
-            if (writeFile)
+            this.clientSocket.Send(Encoding.UTF8.GetBytes("accepted<EOF>"));
+            bool isConvertible = false;
+            double length = 0;
+            int operation = 1;
+            while (!isConvertible)
             {
-                bool isConvertible = false;
-                double length = 0;
-                int operation = 1;
-                while (!isConvertible)
+                try
                 {
-                    try
-                    {
-                        length = Convert.ToDouble((double)nbKo / operation);
-                        isConvertible = true;
-                    }
-                    catch (OverflowException e)
-                    {
-                        isConvertible = false;
-                        if (operation == 1)
-                            operation = 1024;
-                        else
-                            operation = Convert.ToInt32(Math.Pow(operation, 2));
-                    }
+                    length = Convert.ToDouble((double)nbo / operation);
+                    isConvertible = true;
                 }
-                FileInfo info = new FileInfo(path);
-                FileStream Stream = new FileStream(path, FileMode.Create);
-                double bytesLeftToReceive = length;
-                byte[] receiveBuffer = new byte[5000000];
-                int offset = 0;
-                //receive the file content
-                while (bytesLeftToReceive > 0)
+                catch (OverflowException e)
                 {
-                    int bytesRead = clientSocket.Receive(receiveBuffer);
-                    //if we don't do that the file will have a lot of zeroes at the end because it will read all the receiveBuffer
-                    if (bytesRead / operation > bytesLeftToReceive)
-                    {
-                        Stream.Write(receiveBuffer, 0, Convert.ToInt32(bytesLeftToReceive * operation));
-                    }
+                    isConvertible = false;
+                    if (operation == 1)
+                        operation = 1024;
                     else
-                    {
-                        Stream.Write(receiveBuffer, 0, bytesRead);
-                    }
-                    bytesLeftToReceive -= bytesRead / operation;
-                    //receivedMsg.AddRange(bytes);
+                        operation = Convert.ToInt32(Math.Pow(operation, 2));
                 }
-                receiveBuffer = null;
-                Stream.Close();
-                //check checksum
-                Console.WriteLine(checksum);
-                if (this.checksum != "null" && useChecksum)
-                {
-                    if (!this.checksum.Equals(getChecksum(path)))
-                    {
-                        mainForm.ShowError("the received file is not the same as the sending one");
-                    }
-                }
-                receiveFinished = true;
             }
+            FileInfo info = new FileInfo(path);
+            FileStream Stream = new FileStream(path, FileMode.Create);
+            double bytesLeftToReceive = length;
+            byte[] receiveBuffer = new byte[5000000];
+            int offset = 0;
+            //receive the file content
+            while (bytesLeftToReceive > 0)
+            {
+                int bytesRead = clientSocket.Receive(receiveBuffer);
+                //if we don't do that the file will have a lot of zeroes at the end because it will read all the receiveBuffer
+                if (bytesRead / operation > bytesLeftToReceive)
+                {
+                    Stream.Write(receiveBuffer, 0, Convert.ToInt32(bytesLeftToReceive * operation));
+                }
+                else
+                {
+                    Stream.Write(receiveBuffer, 0, bytesRead);
+                }
+                bytesLeftToReceive -= bytesRead / operation;
+                //receivedMsg.AddRange(bytes);
+            }
+            receiveBuffer = null;
+            Stream.Close();
+            //check checksum
+            Console.WriteLine(checksum);
+            if (this.checksum != "null" && useChecksum)
+            {
+                if (!this.checksum.Equals(getChecksum(path)))
+                {
+                    mainForm.ShowError("the received file is not the same as the sending one");
+                }
+            }
+            receiveFinished = true;
         }
     }
 }
