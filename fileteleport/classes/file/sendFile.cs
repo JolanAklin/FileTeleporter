@@ -161,10 +161,19 @@ namespace fileteleport
                 //send some info in csv format (length of the file, file name with it's extension and the name of the pc)
                 string sendInfo = (fileinfo.Length).ToString() + ";" + fileinfo.Name + ";" + mainForm.pcName + ";" + (useChecksum ? getChecksum(fileinfo.FullName) : "null") + "<EOF>";
                 sendSocket.Send(Encoding.UTF8.GetBytes(sendInfo));
-
-                Thread.Sleep(100);
+                
+                byte[] bytes = new Byte[1024];
+                string data;
+                while (true)
+                {
+                    int numByte = sendSocket.Receive(bytes);
+                    data = Encoding.UTF8.GetString(bytes, 0, numByte);
+                    if (data.IndexOf("<EOF>") > -1)
+                        break;
+                }
                 try
                 {
+                    Console.WriteLine("begin transfering file");
                     sendThroughSocket(sendSocket, filename);
                 }
                 catch (Exception e)
@@ -229,24 +238,24 @@ namespace fileteleport
                 string[] fileName = filename.Split('\\');
                 fileNameExtension = fileName[fileName.Length - 1].Split('.');
                 this.nbo = Convert.ToInt64(strLenght);
-                //mainForm.ShowSaveDialogue(fileNameExtension, strLenght, pcName);
-
+                mainForm.ShowSaveDialogue(fileNameExtension, strLenght, pcName);
                 //replace "user" by your user directory
-                WriteFile("C:\\Users\\user\\Desktop\\test.txt");
+                //WriteFile("C:\\Users\\user\\Desktop\\test.txt");
 
 
                 // Close client Socket using the 
                 // Close() method. After closing, 
                 // we can use the closed Socket  
                 // for a new Client Connection
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
+                //clientSocket.Shutdown(SocketShutdown.Both);
+                //clientSocket.Close();
             }
         }
 
         //write the received file
         public void WriteFile(string path)
         {
+            this.clientSocket.Send(Encoding.UTF8.GetBytes("accepted<EOF>"));
             bool isConvertible = false;
             double length = 0;
             int operation = 1;

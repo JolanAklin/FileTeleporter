@@ -180,7 +180,10 @@ namespace fileteleport
         }
         public void AsToSaveFile(string path)
         {
-            sendfile.WriteFile(path);
+            Thread writefile;
+            writefile = new Thread(() => sendfile.WriteFile(path));
+            writefile.IsBackground = true;
+            writefile.Start();            
         }
         #endregion
 
