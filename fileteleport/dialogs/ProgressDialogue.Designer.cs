@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProgressDialogue));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblInfoProgress = new System.Windows.Forms.Label();
             this.pBar = new fileteleport.classes.CustomProgressBar();
+            this.lblInfoProgress = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,6 +50,18 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(327, 32);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
+            // pBar
+            // 
+            this.pBar.BackColor = System.Drawing.Color.Black;
+            this.pBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pBar.ForeColor = System.Drawing.Color.Black;
+            this.pBar.Location = new System.Drawing.Point(3, 3);
+            this.pBar.Name = "pBar";
+            this.pBar.Size = new System.Drawing.Size(321, 26);
+            this.pBar.Step = 1;
+            this.pBar.TabIndex = 0;
+            this.pBar.Value = 50;
+            // 
             // lblInfoProgress
             // 
             this.lblInfoProgress.BackColor = System.Drawing.Color.Gray;
@@ -62,18 +75,6 @@
             this.lblInfoProgress.Text = "label1";
             this.lblInfoProgress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pBar
-            // 
-            this.pBar.BackColor = System.Drawing.Color.Black;
-            this.pBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pBar.ForeColor = System.Drawing.Color.Black;
-            this.pBar.Location = new System.Drawing.Point(3, 3);
-            this.pBar.Name = "pBar";
-            this.pBar.Size = new System.Drawing.Size(321, 26);
-            this.pBar.Step = 1;
-            this.pBar.TabIndex = 0;
-            this.pBar.Value = 50;
-            // 
             // ProgressDialogue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -84,6 +85,7 @@
             this.Controls.Add(this.lblInfoProgress);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProgressDialogue";
             this.Text = "Progress";
             this.tableLayoutPanel1.ResumeLayout(false);

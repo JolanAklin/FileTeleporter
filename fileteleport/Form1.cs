@@ -51,7 +51,7 @@ namespace fileteleport
         Thread tRecieveInfo;
         public Form1()
         {
-            Theme.Initialize();
+            Theme.Initialize(false);
             udpClient.Client.Bind(new IPEndPoint(IPAddress.Any.Address, PORT));
             IPEndPoint from = new IPEndPoint(0, 0);
             InitializeComponent();
@@ -63,8 +63,6 @@ namespace fileteleport
             pcs = new List<Machine>();
             pDialogue = new ProgressDialogue("transfer", "transfer", 0);
             label1.ForeColor = Theme.textColor;
-
-
         }
 
         public void ShowPcInvoke(Machine pc)

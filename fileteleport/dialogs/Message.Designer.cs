@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Message));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblYes = new System.Windows.Forms.Label();
             this.lblText = new System.Windows.Forms.Label();
@@ -89,6 +90,7 @@
             this.Controls.Add(this.lblText);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Message";
             this.Text = "Message";
             this.tableLayoutPanel1.ResumeLayout(false);

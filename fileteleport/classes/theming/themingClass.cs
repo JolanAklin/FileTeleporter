@@ -38,8 +38,9 @@ namespace Theming
         //public static Color clickColor;
         public static Color textColor;
 
-        public static void Initialize()
+        public static void Initialize(bool whiteTheme)
         {
+            white = whiteTheme;
             if (white)
             {
                 backColor1 = Color.FromArgb(255, 255, 255, 255);
