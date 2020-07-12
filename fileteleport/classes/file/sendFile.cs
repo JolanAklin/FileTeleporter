@@ -71,9 +71,9 @@ namespace fileteleport
         private void sendThroughSocket(Socket s, string filePath)
         {
 
-            ProgressDialogue progressDialogue = new ProgressDialogue("transfering...", "transfering...", 0);
+            ProgressDialogue progressDialogue = new ProgressDialogue("Uploading...", "transfering...", 0);
             Thread threadProgress;
-            threadProgress = new Thread(() => ProgressBarThread("transfering...", "transfering...", 0, progressDialogue));
+            threadProgress = new Thread(() => UploadProgressBarThread(progressDialogue));
             threadProgress.IsBackground = true;
             threadProgress.Start();
 
@@ -90,7 +90,7 @@ namespace fileteleport
                     s.Send(sendBuffer);
                     int percentage = Convert.ToInt32((((double)file.Length - (double)bytesLeftToTransmit) / (double)file.Length) * (double)100);
                     progressDialogue.SetProgress(percentage);
-                    progressDialogue.ChangeText("Transfering...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1000000).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
+                    progressDialogue.ChangeText("Uploading...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1000000).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
                 }
                 sendBuffer = null;
                 progressDialogue.CloseForm();
@@ -264,6 +264,13 @@ namespace fileteleport
             bool isConvertible = false;
             double length = 0;
             int operation = 1;
+
+            ProgressDialogue progressDialogue = new ProgressDialogue("Downloading...", "transfering...", 0);
+            Thread threadProgress;
+            threadProgress = new Thread(() => DownloadProgressBarThread(progressDialogue));
+            threadProgress.IsBackground = true;
+            threadProgress.Start();
+
             while (!isConvertible)
             {
                 try
@@ -285,6 +292,7 @@ namespace fileteleport
             double bytesLeftToReceive = length;
             byte[] receiveBuffer = new byte[5000000];
             int offset = 0;
+
             //receive the file content
             while (bytesLeftToReceive > 0)
             {
@@ -299,8 +307,14 @@ namespace fileteleport
                     Stream.Write(receiveBuffer, 0, bytesRead);
                 }
                 bytesLeftToReceive -= bytesRead / operation;
+
+                int percentage = Convert.ToInt32((((double)nbo - (double)bytesLeftToReceive) / (double)nbo) * (double)100);
+                progressDialogue.SetProgress(percentage);
+                progressDialogue.ChangeText("Downloading...\n" + (((double)nbo - (double)bytesLeftToReceive) / 1000000).ToString("f2") + " / " + ((double)nbo / 1000000).ToString("f2") + "Mo");
+
                 //receivedMsg.AddRange(bytes);
             }
+            progressDialogue.CloseForm();
             receiveBuffer = null;
             Stream.Close();
             //check checksum
@@ -314,7 +328,12 @@ namespace fileteleport
             }
             receiveFinished = true;
         }
-        private void ProgressBarThread(string text, string title, int value, ProgressDialogue pDialogue)
+
+        private void UploadProgressBarThread(ProgressDialogue pDialogue)
+        {
+            pDialogue.ShowDialog();
+        }
+        private void DownloadProgressBarThread(ProgressDialogue pDialogue)
         {
             pDialogue.ShowDialog();
         }
