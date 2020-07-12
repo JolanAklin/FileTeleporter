@@ -64,8 +64,9 @@
             // 
             // pBar
             // 
-            this.pBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.pBar.BackColor = System.Drawing.Color.Black;
             this.pBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pBar.ForeColor = System.Drawing.Color.Black;
             this.pBar.Location = new System.Drawing.Point(3, 3);
             this.pBar.Name = "pBar";
             this.pBar.Size = new System.Drawing.Size(321, 26);
