@@ -51,10 +51,10 @@ namespace fileteleport
         Thread tRecieveInfo;
         public Form1()
         {
-            Theme.Initialize(false);
+            InitializeComponent();
+            ChangeTheme(false);
             udpClient.Client.Bind(new IPEndPoint(IPAddress.Any.Address, PORT));
             IPEndPoint from = new IPEndPoint(0, 0);
-            InitializeComponent();
             //Thread tSendInfo = new Thread(() => SendWhoIAm.sendWhoIam(udpClient,PORT,from));
             //tSendInfo.Start();
             tRecieveInfo = new Thread(() => MachineDiscoverer.send(udpClient, PORT, from, this));
@@ -63,6 +63,16 @@ namespace fileteleport
             pcs = new List<Machine>();
             pDialogue = new ProgressDialogue("transfer", "transfer", 0);
             label1.ForeColor = Theme.textColor;
+            
+        }
+
+        public void ChangeTheme(bool whiteTheme)
+        {
+            Theme.Initialize(whiteTheme);
+            if(whiteTheme)
+                panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogoWhiteTheme;
+            else
+                panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogo;
         }
 
         public void ShowPcInvoke(Machine pc)
@@ -121,8 +131,6 @@ namespace fileteleport
 
             //start the receving server
             sendfile.Initialize(this);
-
-
         }
 
 
