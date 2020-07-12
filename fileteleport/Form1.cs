@@ -51,6 +51,7 @@ namespace fileteleport
         Thread tRecieveInfo;
         public Form1()
         {
+            Theme.Initialize();
             udpClient.Client.Bind(new IPEndPoint(IPAddress.Any.Address, PORT));
             IPEndPoint from = new IPEndPoint(0, 0);
             InitializeComponent();
@@ -61,6 +62,7 @@ namespace fileteleport
             tRecieveInfo.Start();
             pcs = new List<Machine>();
             pDialogue = new ProgressDialogue("transfer", "transfer", 0);
+            label1.ForeColor = Theme.textColor;
 
 
         }
@@ -206,7 +208,7 @@ namespace fileteleport
         private void Label1_MouseLeave(object sender, EventArgs e)
         {
             Label lbl = sender as Label;
-            lbl.ForeColor = Color.White;
+            lbl.ForeColor = Theme.textColor;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

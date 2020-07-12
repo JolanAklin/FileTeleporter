@@ -45,10 +45,13 @@ namespace fileteleport
 
             destIP = ip;
             lblPc.Text = nomPc;
+            lblPc.ForeColor = Theme.textColor;
             string[] fileName = fichier.Split('\\');
             lblFichier.Text = fileName[fileName.Length - 1];
+            lblFichier.ForeColor = Theme.textColor;
             fileToSend = fichier;
             lblSize.Text = (Math.Round(new System.IO.FileInfo(fichier).Length / (double)1024)).ToString() + "Ko";
+            lblSize.ForeColor = Theme.textColor;
             sendFile = sendff;
             this.mainForm = mainForm;
         }
@@ -57,7 +60,9 @@ namespace fileteleport
         {
             this.BackColor = Theme.backColor1;
             lblCancel.BackColor = Theme.backColor2;
+            lblCancel.ForeColor = Theme.textColor;
             lblYes.BackColor = Theme.backColor2;
+            lblYes.ForeColor = Theme.textColor;
             tlpFichier.BackColor = Theme.backColor2;
             tlpPc.BackColor = Theme.backColor2;
         }

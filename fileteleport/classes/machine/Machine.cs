@@ -31,6 +31,7 @@ namespace fileteleport
             this.MouseEnter += new EventHandler(machineHoverEnter);
             this.MouseLeave += new EventHandler(machineHoverLeave);
             this.Click += new EventHandler(machineClick);
+            ForeColor = Theme.textColor;
         }
 
         public string getName()

@@ -40,6 +40,7 @@ namespace fileteleport.dialogs
             lblInfoProgress.BackColor = Theme.backColor1;
             tableLayoutPanel1.BackColor = Theme.backColor1;
             lblInfoProgress.Text = text;
+            lblInfoProgress.ForeColor = Theme.textColor;
             pBar.Value = value;
             pBar.BackColor = Theme.backColor1;
             pBar.ForeColor = Theme.backColor1;

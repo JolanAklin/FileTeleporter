@@ -26,11 +26,36 @@ using System.Drawing;
 
 namespace Theming
 {
+
+
+
     public static class Theme
     {
-        public static Color backColor1 = Color.FromArgb(255, 36, 36, 41);
-        public static Color backColor2 = Color.FromArgb(255, 45, 45, 50);
-        public static Color hoverColor = Color.FromArgb(255, 7, 114, 185);
-        public static Color clickColor = Color.FromArgb(255, 60, 60, 65);
+        private static bool white = true;
+        public static Color backColor1;
+        public static Color backColor2;
+        public static Color hoverColor;
+        //public static Color clickColor;
+        public static Color textColor;
+
+        public static void Initialize()
+        {
+            if (white)
+            {
+                backColor1 = Color.FromArgb(255, 255, 255, 255);
+                backColor2 = Color.FromArgb(255, 230, 230, 230);
+                hoverColor = Color.FromArgb(255, 65, 175, 245);
+                //clickColor = Color.FromArgb(255, 60, 60, 65);
+                textColor = Color.FromArgb(255, 0, 0, 0);
+            }
+            else
+            {
+                backColor1 = Color.FromArgb(255, 36, 36, 41);
+                backColor2 = Color.FromArgb(255, 45, 45, 50);
+                hoverColor = Color.FromArgb(255, 7, 114, 185);
+                //clickColor = Color.FromArgb(255, 60, 60, 65);
+                textColor = Color.FromArgb(255, 255, 255, 255);
+            }
+        }
     }
 }

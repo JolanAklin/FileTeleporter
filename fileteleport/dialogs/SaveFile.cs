@@ -58,6 +58,11 @@ namespace fileteleport
             lblPc.Text = pcName;
             tlpFichier.BackColor = Theme.backColor2;
             tlpPc.BackColor = Theme.backColor2;
+            lblCancel.ForeColor = Theme.textColor;
+            lblYes.ForeColor = Theme.textColor;
+            lblFichier.ForeColor = Theme.textColor;
+            lblSize.ForeColor = Theme.textColor;
+            lblPc.ForeColor = Theme.textColor;
         }
 
         private void lblNo_Click(object sender, EventArgs e)
