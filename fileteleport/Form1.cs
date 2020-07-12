@@ -56,13 +56,13 @@ namespace fileteleport
             InitializeComponent();
             //Thread tSendInfo = new Thread(() => SendWhoIAm.sendWhoIam(udpClient,PORT,from));
             //tSendInfo.Start();
-            tRecieveInfo = new Thread(() => MachineDiscoverer.send(udpClient, PORT, from,this));
+            tRecieveInfo = new Thread(() => MachineDiscoverer.send(udpClient, PORT, from, this));
             tRecieveInfo.IsBackground = true;
             tRecieveInfo.Start();
             pcs = new List<Machine>();
             pDialogue = new ProgressDialogue("transfer", "transfer", 0);
 
-            
+
         }
 
         public void ShowPcInvoke(Machine pc)
@@ -121,7 +121,7 @@ namespace fileteleport
 
             //start the receving server
             sendfile.Initialize(this);
-            
+
 
         }
 
@@ -183,7 +183,7 @@ namespace fileteleport
             Thread writefile;
             writefile = new Thread(() => sendfile.WriteFile(path));
             writefile.IsBackground = true;
-            writefile.Start();            
+            writefile.Start();
         }
         #endregion
 
@@ -217,46 +217,5 @@ namespace fileteleport
                 msg.Show();
             }));
         }
-
-        #region ProgressBarDialogue
-        public void ShowProgressBarDialogue (string text, string title, int value)
-        {
-            Invoke(new Action(() =>
-            {
-                Thread threadProgress;
-                threadProgress = new Thread(() => ProgressBarThread(text, title, value));
-                threadProgress.IsBackground = true;
-                threadProgress.Start();
-            }));
-        }
-        public void ProgressBarThread(string text, string title, int value)
-        {
-            pDialogue = new ProgressDialogue(text, title, value);
-            pDialogue.ShowDialog();
-
-        }
-        public void MoveProgressBar(int increment)
-        {
-            Invoke(new Action(() =>
-            {
-                pDialogue.SetProgress(increment);
-            }));
-        }
-        public void ChangeProgressDialogueText(string text)
-        {
-            Invoke(new Action(() =>
-            {
-                pDialogue.ChangeText(text);
-            }));
-        }
-
-        public void CloseProgressDialogue()
-        {
-            Invoke(new Action(() =>
-            {
-                pDialogue.CloseForm();
-            }));
-        }
-        #endregion
     }
 }

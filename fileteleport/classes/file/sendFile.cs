@@ -71,7 +71,12 @@ namespace fileteleport
         private void sendThroughSocket(Socket s, string filePath)
         {
 
-            mainForm.ShowProgressBarDialogue("transfering...", "transfering...", 0);
+            ProgressDialogue progressDialogue = new ProgressDialogue("transfering...", "transfering...", 0);
+            Thread threadProgress;
+            threadProgress = new Thread(() => ProgressBarThread("transfering...", "transfering...", 0, progressDialogue));
+            threadProgress.IsBackground = true;
+            threadProgress.Start();
+
             Thread.Sleep(500);
             using (var file = File.OpenRead(filePath))
             {
@@ -84,11 +89,11 @@ namespace fileteleport
                     bytesLeftToTransmit -= dataToSend;
                     s.Send(sendBuffer);
                     int percentage = Convert.ToInt32((((double)file.Length - (double)bytesLeftToTransmit) / (double)file.Length) * (double)100);
-                    mainForm.MoveProgressBar(percentage);
-                    mainForm.ChangeProgressDialogueText("Transfering...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1000000).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
+                    progressDialogue.SetProgress(percentage);
+                    progressDialogue.ChangeText("Transfering...\n" + (((double)file.Length - (double)bytesLeftToTransmit) / 1000000).ToString("f2") + " / " + fileLengthMo.ToString("f2") + "Mo");
                 }
                 sendBuffer = null;
-                mainForm.CloseProgressDialogue();
+                progressDialogue.CloseForm();
             }
         }
         private string getChecksum(string file)
@@ -308,6 +313,10 @@ namespace fileteleport
                 }
             }
             receiveFinished = true;
+        }
+        private void ProgressBarThread(string text, string title, int value, ProgressDialogue pDialogue)
+        {
+            pDialogue.ShowDialog();
         }
     }
 }
