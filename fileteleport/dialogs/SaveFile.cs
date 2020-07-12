@@ -58,11 +58,16 @@ namespace fileteleport
             lblPc.Text = pcName;
             tlpFichier.BackColor = Theme.backColor2;
             tlpPc.BackColor = Theme.backColor2;
+            lblCancel.ForeColor = Theme.textColor;
+            lblYes.ForeColor = Theme.textColor;
+            lblFichier.ForeColor = Theme.textColor;
+            lblSize.ForeColor = Theme.textColor;
+            lblPc.ForeColor = Theme.textColor;
         }
 
         private void lblNo_Click(object sender, EventArgs e)
         {
-            mainForm.AsToSaveFile(false, "");
+            mainForm.AsToNotSaveFile();
             this.Close();
         }
 
@@ -94,7 +99,7 @@ namespace fileteleport
             if (sfd1.ShowDialog() == DialogResult.OK)
             {
                 this.Close();
-                mainForm.AsToSaveFile(true,sfd1.FileName);
+                mainForm.AsToSaveFile(sfd1.FileName);
             }
         }
     }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(sendConfirmation));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblCancel = new System.Windows.Forms.Label();
             this.lblYes = new System.Windows.Forms.Label();
@@ -220,6 +221,7 @@
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "sendConfirmation";
             this.ShowInTaskbar = false;
             this.Text = "Send confirmation";

@@ -38,9 +38,11 @@ namespace fileteleport
             this.Text = title;
             this.BackColor = Theme.backColor1;
             lblYes.BackColor = Theme.backColor2;
+            lblYes.ForeColor = Theme.textColor;
             lblText.BackColor = Theme.backColor1;
             tableLayoutPanel1.BackColor = Theme.backColor1;
             lblText.Text = text;
+            lblText.ForeColor = Theme.textColor;
         }
 
         private void LblYes_Click(object sender, EventArgs e)

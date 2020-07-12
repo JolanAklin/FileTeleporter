@@ -31,6 +31,8 @@ using System.Threading;
 using Theming;
 using System.Net;
 using System.Net.Sockets;
+using fileteleport.dialogs;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace fileteleport
 {
@@ -38,6 +40,7 @@ namespace fileteleport
     {
         private List<Machine> pcs;
         public String pcName = System.Environment.MachineName;
+        public ProgressDialogue pDialogue;
 
         private int row = 1;
         public sendFile sendfile = new sendFile();
@@ -48,15 +51,28 @@ namespace fileteleport
         Thread tRecieveInfo;
         public Form1()
         {
+            InitializeComponent();
+            ChangeTheme(false);
             udpClient.Client.Bind(new IPEndPoint(IPAddress.Any.Address, PORT));
             IPEndPoint from = new IPEndPoint(0, 0);
-            InitializeComponent();
             //Thread tSendInfo = new Thread(() => SendWhoIAm.sendWhoIam(udpClient,PORT,from));
             //tSendInfo.Start();
-            tRecieveInfo = new Thread(() => MachineDiscoverer.send(udpClient, PORT, from,this));
+            tRecieveInfo = new Thread(() => MachineDiscoverer.send(udpClient, PORT, from, this));
             tRecieveInfo.IsBackground = true;
             tRecieveInfo.Start();
             pcs = new List<Machine>();
+            pDialogue = new ProgressDialogue("transfer", "transfer", 0);
+            label1.ForeColor = Theme.textColor;
+            
+        }
+
+        public void ChangeTheme(bool whiteTheme)
+        {
+            Theme.Initialize(whiteTheme);
+            if(whiteTheme)
+                panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogoWhiteTheme;
+            else
+                panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogo;
         }
 
         public void ShowPcInvoke(Machine pc)
@@ -117,6 +133,7 @@ namespace fileteleport
             sendfile.Initialize(this);
         }
 
+
         #region afficheur de machine
         private void ShowMachine(Machine machineToShow)
         {
@@ -157,6 +174,10 @@ namespace fileteleport
             Invoke(new Action(() =>
             {
                 saveFile(fileNameExtension, size, pcName);
+                //Thread threadProgress;
+                //threadProgress = new Thread(() => saveFile(fileNameExtension, size, pcName));
+                //threadProgress.IsBackground = true;
+                //threadProgress.Start();
             }));
         }
 
@@ -165,9 +186,16 @@ namespace fileteleport
             SaveFile savefileDialog = new SaveFile(this, fileNameExtension, size, pcName);
             savefileDialog.ShowDialog();
         }
-        public void AsToSaveFile(bool saveFile,string path)
+        public void AsToSaveFile(string path)
         {
-            sendfile.WriteFile(saveFile,path);
+            Thread writefile;
+            writefile = new Thread(() => sendfile.WriteFile(path));
+            writefile.IsBackground = true;
+            writefile.Start();
+        }
+        public void AsToNotSaveFile()
+        {
+            sendfile.NotSaveFile();
         }
         #endregion
 
@@ -186,7 +214,7 @@ namespace fileteleport
         private void Label1_MouseLeave(object sender, EventArgs e)
         {
             Label lbl = sender as Label;
-            lbl.ForeColor = Color.White;
+            lbl.ForeColor = Theme.textColor;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

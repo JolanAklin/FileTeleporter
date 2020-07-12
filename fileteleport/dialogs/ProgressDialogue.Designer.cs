@@ -1,6 +1,6 @@
-﻿namespace fileteleport
+﻿namespace fileteleport.dialogs
 {
-    partial class Message
+    partial class ProgressDialogue
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Message));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProgressDialogue));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblYes = new System.Windows.Forms.Label();
-            this.lblText = new System.Windows.Forms.Label();
+            this.pBar = new fileteleport.classes.CustomProgressBar();
+            this.lblInfoProgress = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,7 +40,7 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.lblYes, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pBar, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 133);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -48,53 +48,47 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(327, 32);
-            this.tableLayoutPanel1.TabIndex = 4;
+            this.tableLayoutPanel1.TabIndex = 5;
             // 
-            // lblYes
+            // pBar
             // 
-            this.lblYes.AutoSize = true;
-            this.lblYes.BackColor = System.Drawing.Color.Black;
-            this.lblYes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblYes.ForeColor = System.Drawing.Color.White;
-            this.lblYes.Location = new System.Drawing.Point(3, 3);
-            this.lblYes.Margin = new System.Windows.Forms.Padding(3);
-            this.lblYes.Name = "lblYes";
-            this.lblYes.Size = new System.Drawing.Size(321, 26);
-            this.lblYes.TabIndex = 1;
-            this.lblYes.Text = "Yes";
-            this.lblYes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblYes.Click += new System.EventHandler(this.LblYes_Click);
-            this.lblYes.MouseEnter += new System.EventHandler(this.LblYes_MouseEnter);
-            this.lblYes.MouseLeave += new System.EventHandler(this.LblYes_MouseLeave);
+            this.pBar.BackColor = System.Drawing.Color.Black;
+            this.pBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pBar.ForeColor = System.Drawing.Color.Black;
+            this.pBar.Location = new System.Drawing.Point(3, 3);
+            this.pBar.Name = "pBar";
+            this.pBar.Size = new System.Drawing.Size(321, 26);
+            this.pBar.Step = 1;
+            this.pBar.TabIndex = 0;
+            this.pBar.Value = 50;
             // 
-            // lblText
+            // lblInfoProgress
             // 
-            this.lblText.BackColor = System.Drawing.Color.Gray;
-            this.lblText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblText.ForeColor = System.Drawing.Color.White;
-            this.lblText.Location = new System.Drawing.Point(0, 0);
-            this.lblText.Name = "lblText";
-            this.lblText.Padding = new System.Windows.Forms.Padding(10);
-            this.lblText.Size = new System.Drawing.Size(327, 133);
-            this.lblText.TabIndex = 5;
-            this.lblText.Text = "label1";
-            this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblInfoProgress.BackColor = System.Drawing.Color.Gray;
+            this.lblInfoProgress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblInfoProgress.ForeColor = System.Drawing.Color.White;
+            this.lblInfoProgress.Location = new System.Drawing.Point(0, 0);
+            this.lblInfoProgress.Name = "lblInfoProgress";
+            this.lblInfoProgress.Padding = new System.Windows.Forms.Padding(10);
+            this.lblInfoProgress.Size = new System.Drawing.Size(327, 133);
+            this.lblInfoProgress.TabIndex = 6;
+            this.lblInfoProgress.Text = "label1";
+            this.lblInfoProgress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // Message
+            // ProgressDialogue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Gray;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(327, 165);
             this.ControlBox = false;
-            this.Controls.Add(this.lblText);
+            this.Controls.Add(this.lblInfoProgress);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Message";
-            this.Text = "Message";
+            this.Name = "ProgressDialogue";
+            this.Text = "Progress";
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -102,7 +96,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label lblYes;
-        private System.Windows.Forms.Label lblText;
+        private System.Windows.Forms.Label lblInfoProgress;
+        private classes.CustomProgressBar pBar;
     }
 }
