@@ -62,7 +62,7 @@ namespace fileteleport
 
         private void lblNo_Click(object sender, EventArgs e)
         {
-            //mainForm.AsToSaveFile(false, "");
+            mainForm.AsToNotSaveFile();
             this.Close();
         }
 

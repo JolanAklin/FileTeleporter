@@ -178,8 +178,14 @@ namespace fileteleport
                 }
                 try
                 {
-                    Console.WriteLine("begin transfering file");
-                    sendThroughSocket(sendSocket, filename);
+                    if(data == "accepted<EOF>")
+                    {
+                        Console.WriteLine("begin transfering file");
+                        sendThroughSocket(sendSocket, filename);
+                    }else
+                    {
+                        Console.WriteLine("file transfer aborted");
+                    }
                 }
                 catch (Exception e)
                 {
@@ -327,6 +333,11 @@ namespace fileteleport
                 }
             }
             receiveFinished = true;
+        }
+
+        public void NotSaveFile()
+        {
+            this.clientSocket.Send(Encoding.UTF8.GetBytes("rejected<EOF>"));
         }
 
         private void UploadProgressBarThread(ProgressDialogue pDialogue)
