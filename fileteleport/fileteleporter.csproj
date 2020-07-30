@@ -107,6 +107,12 @@
     <Compile Include="dialogs\sendConfirmation.Designer.cs">
       <DependentUpon>sendConfirmation.cs</DependentUpon>
     </Compile>
+    <Compile Include="dialogs\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dialogs\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +132,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="dialogs\sendConfirmation.resx">
       <DependentUpon>sendConfirmation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dialogs\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
