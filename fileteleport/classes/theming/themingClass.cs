@@ -31,7 +31,7 @@ namespace Theming
 
     public static class Theme
     {
-        private static bool white = true;
+        private static bool white;
         public static Color backColor1;
         public static Color backColor2;
         public static Color hoverColor;

@@ -62,14 +62,15 @@ namespace fileteleport
             tRecieveInfo.Start();
             pcs = new List<Machine>();
             pDialogue = new ProgressDialogue("transfer", "transfer", 0);
-            label1.ForeColor = Theme.textColor;
-            
+            lblCredits.ForeColor = Theme.textColor;
+            lblSettings.ForeColor = Theme.textColor;
+
         }
 
         public void ChangeTheme(bool whiteTheme)
         {
-            Theme.Initialize(whiteTheme);
-            if(whiteTheme)
+            Theme.Initialize(Properties.Settings.Default.WhiteTheme);
+            if (whiteTheme)
                 panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogoWhiteTheme;
             else
                 panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogo;
@@ -118,15 +119,7 @@ namespace fileteleport
             this.BackColor = Theme.backColor1;
             pnlScroll.BackColor = Theme.backColor2;
             Machine pc1;
-            pc1 = new Machine("Pc de jean", IPAddress.Parse("192.168.0.184"), this);
-            pcs.Add(pc1);
-            pc1 = new Machine("Pc de jean", IPAddress.Parse("127.0.0.1"), this);
-            ShowMachine(pc1);
-            for (int i = 0; i < 20; i++)
-            {
-                pc1 = new Machine("Pc de jean", IPAddress.Parse("127.0.0." + i), this);
-
-            }
+            pc1 = new Machine("Loopback", IPAddress.Parse("127.0.0.1"), this);
             ShowPc(pc1);
 
             //start the receving server
@@ -228,6 +221,34 @@ namespace fileteleport
                 Message msg = new Message(error, "Error");
                 msg.Show();
             }));
+        }
+
+        private void Form1_Link_Mouse_Enter(object sender, EventArgs e)
+        {
+            Label lbl = sender as Label;
+            lbl.ForeColor = Theme.hoverColor;
+        }
+
+        private void From1_Link_Mouse_Leave(object sender, EventArgs e)
+        {
+            Label lbl = sender as Label;
+            lbl.ForeColor = Theme.textColor;
+        }
+
+        private void Click_Credits(object sender, EventArgs e)
+        {
+            Message msg = new Message("Made by Jolan Aklin and Yohan Zbinden\n\nCopyright 2019 Jolan Aklin and Yohan Zbinden\nThis software is ditributed under the terms of the GNU General Public License as published by the Free Software Foundation. You should have received a copy of the GNU General Public License along with FileTeleporter.  If not, see<https://www.gnu.org/licenses/>.", "Credits");
+            msg.Show();
+        }
+
+        private void Click_Settings(object sender, EventArgs e)
+        {
+            Settings settings = new Settings(this);
+            settings.Show();
+        }
+        public void FormClose()
+        {
+            this.Close();
         }
     }
 }
