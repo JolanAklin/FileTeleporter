@@ -149,6 +149,7 @@
             this.cbxWhiteTheme.Size = new System.Drawing.Size(143, 16);
             this.cbxWhiteTheme.TabIndex = 7;
             this.cbxWhiteTheme.UseVisualStyleBackColor = true;
+            this.cbxWhiteTheme.CheckedChanged += new System.EventHandler(this.cbxWhiteTheme_CheckedChanged);
             // 
             // lblAppareance
             // 
@@ -173,7 +174,7 @@
             this.lblRestart.Name = "lblRestart";
             this.lblRestart.Size = new System.Drawing.Size(309, 22);
             this.lblRestart.TabIndex = 11;
-            this.lblRestart.Text = "You need to restart the app after changing settings";
+            this.lblRestart.Text = "You need to restart the app manually after changing settings";
             this.lblRestart.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // Settings

@@ -69,7 +69,7 @@ namespace fileteleport
 
         public void ChangeTheme(bool whiteTheme)
         {
-            Theme.Initialize(whiteTheme);
+            Theme.Initialize(Properties.Settings.Default.WhiteTheme);
             if (whiteTheme)
                 panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogoWhiteTheme;
             else

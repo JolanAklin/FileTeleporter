@@ -33,6 +33,7 @@ namespace fileteleport.dialogs
     public partial class Settings : Form
     {
         private Form mainForm;
+        private bool whiteTheme;
 
         public Settings(Form mainForm)
         {
@@ -50,6 +51,9 @@ namespace fileteleport.dialogs
             lblSave.ForeColor = Theme.textColor;
             lblwhiteTheme.ForeColor = Theme.textColor;
             lblRestart.ForeColor = Theme.textColor;
+            whiteTheme = Properties.Settings.Default.WhiteTheme;
+            if (whiteTheme)
+                cbxWhiteTheme.Checked = true;
         }
 
         private void Mouse_Enter(object sender, EventArgs e)
@@ -71,8 +75,16 @@ namespace fileteleport.dialogs
 
         private void Click_Save(object sender, EventArgs e)
         {
+            Properties.Settings.Default.WhiteTheme = whiteTheme;
+            Properties.Settings.Default.Save();
             this.Close();
             mainForm.Close();
+        }
+
+        private void cbxWhiteTheme_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cbx = sender as CheckBox;
+            whiteTheme = cbx.Checked;
         }
     }
 }
