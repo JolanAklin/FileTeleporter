@@ -78,7 +78,7 @@ namespace fileteleport.dialogs
             Properties.Settings.Default.WhiteTheme = whiteTheme;
             Properties.Settings.Default.Save();
             this.Close();
-            mainForm.Close();
+            Application.Restart();
         }
 
         private void cbxWhiteTheme_CheckedChanged(object sender, EventArgs e)

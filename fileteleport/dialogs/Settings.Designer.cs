@@ -33,11 +33,11 @@
             this.lblClose = new System.Windows.Forms.Label();
             this.lblSave = new System.Windows.Forms.Label();
             this.tlpContainer = new System.Windows.Forms.TableLayoutPanel();
+            this.lblRestart = new System.Windows.Forms.Label();
             this.tlpWhiteTheme = new System.Windows.Forms.TableLayoutPanel();
             this.lblwhiteTheme = new System.Windows.Forms.Label();
             this.cbxWhiteTheme = new System.Windows.Forms.CheckBox();
             this.lblAppareance = new System.Windows.Forms.Label();
-            this.lblRestart = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tlpContainer.SuspendLayout();
             this.tlpWhiteTheme.SuspendLayout();
@@ -88,7 +88,7 @@
             this.lblSave.Name = "lblSave";
             this.lblSave.Size = new System.Drawing.Size(158, 26);
             this.lblSave.TabIndex = 3;
-            this.lblSave.Text = "Save and quit";
+            this.lblSave.Text = "Save and restart";
             this.lblSave.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblSave.Click += new System.EventHandler(this.Click_Save);
             this.lblSave.MouseEnter += new System.EventHandler(this.Mouse_Enter);
@@ -110,6 +110,19 @@
             this.tlpContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tlpContainer.Size = new System.Drawing.Size(327, 84);
             this.tlpContainer.TabIndex = 1;
+            // 
+            // lblRestart
+            // 
+            this.lblRestart.AutoSize = true;
+            this.lblRestart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRestart.ForeColor = System.Drawing.Color.White;
+            this.lblRestart.Location = new System.Drawing.Point(15, 59);
+            this.lblRestart.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
+            this.lblRestart.Name = "lblRestart";
+            this.lblRestart.Size = new System.Drawing.Size(309, 22);
+            this.lblRestart.TabIndex = 11;
+            this.lblRestart.Text = "The app needs to be restarted after changes";
+            this.lblRestart.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // tlpWhiteTheme
             // 
@@ -163,19 +176,6 @@
             this.lblAppareance.TabIndex = 10;
             this.lblAppareance.Text = "Appearance";
             this.lblAppareance.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            // 
-            // lblRestart
-            // 
-            this.lblRestart.AutoSize = true;
-            this.lblRestart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblRestart.ForeColor = System.Drawing.Color.White;
-            this.lblRestart.Location = new System.Drawing.Point(15, 59);
-            this.lblRestart.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
-            this.lblRestart.Name = "lblRestart";
-            this.lblRestart.Size = new System.Drawing.Size(309, 22);
-            this.lblRestart.TabIndex = 11;
-            this.lblRestart.Text = "You need to restart the app manually after changing settings";
-            this.lblRestart.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // Settings
             // 

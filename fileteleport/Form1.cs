@@ -52,7 +52,7 @@ namespace fileteleport
         public Form1()
         {
             InitializeComponent();
-            ChangeTheme(false);
+            LoadTheme();
             udpClient.Client.Bind(new IPEndPoint(IPAddress.Any.Address, PORT));
             IPEndPoint from = new IPEndPoint(0, 0);
             //Thread tSendInfo = new Thread(() => SendWhoIAm.sendWhoIam(udpClient,PORT,from));
@@ -67,10 +67,10 @@ namespace fileteleport
 
         }
 
-        public void ChangeTheme(bool whiteTheme)
+        public void LoadTheme()
         {
             Theme.Initialize(Properties.Settings.Default.WhiteTheme);
-            if (whiteTheme)
+            if (Properties.Settings.Default.WhiteTheme)
                 panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogoWhiteTheme;
             else
                 panel1.BackgroundImage = Properties.Resources.FileTeleporterHeaderLogo;
